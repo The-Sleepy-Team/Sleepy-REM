@@ -9,25 +9,16 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.example.tyler.helloworld.SecondActivity"
-    tools:showIn="@layout/activity_second">
+    tools:context="com.example.tyler.helloworld.Settings"
+    tools:showIn="@layout/activity_settings">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/second_page"
+        android:text="@string/settings_page"
         android:id="@+id/text2"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="190dp" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/second_page_button"
-        android:id="@+id/button"
-        android:layout_below="@+id/text2"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="125dp" />
 
 </RelativeLayout>

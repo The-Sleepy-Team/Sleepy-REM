@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.example.tyler.helloworld.SecondActivity">
+    tools:context="com.example.tyler.helloworld.ThirdActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/my_toolbar"
@@ -16,7 +16,7 @@
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
-    <include layout="@layout/content_second" />
+    <include layout="@layout/content_third" />
 
 
 </android.support.design.widget.CoordinatorLayout>
