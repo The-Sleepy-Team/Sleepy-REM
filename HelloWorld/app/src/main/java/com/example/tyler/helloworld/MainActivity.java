@@ -9,38 +9,102 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.content.Intent;
-import android.view.View;
 import android.widget.TextView;
 import android.widget.Button;
 import android.widget.ImageButton;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.text.DecimalFormat;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.example.tyler.helloworld.Location;
+import com.example.tyler.helloworld.Weather;
+
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.view.Menu;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 
 
 public class MainActivity extends AppCompatActivity {
 
+/*    private TextView cityText;
+    private TextView condDescr;
+    private TextView temp;
+    private TextView press;
+    private TextView windSpeed;
+    private TextView windDeg;
+
+    private TextView hum;
+    private ImageView imgView;
+
+    private TextView maxTemp;
+    private TextView minTemp;*/
+
+    //private TextView temp;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //String city = "London,UK";
+
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
 
 
-        Button button = (Button)findViewById(R.id.button);
-        button.setOnClickListener(new View.OnClickListener(){
+        Button button = (Button) findViewById(R.id.button);
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 goToSecondActivity();
             }
         });
 
-        ImageButton button2 = (ImageButton)findViewById(R.id.button2);
-        button2.setOnClickListener(new View.OnClickListener(){
+        ImageButton button2 = (ImageButton) findViewById(R.id.button2);
+        button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 goToSecondActivity();
             }
         });
+
+       //cityText = (TextView) findViewById(R.id.cityText);
+        /*
+        condDescr = (TextView) findViewById(R.id.condDescr);
+        temp = (TextView) findViewById(R.id.temp);
+        hum = (TextView) findViewById(R.id.hum);
+        press = (TextView) findViewById(R.id.press);
+        windSpeed = (TextView) findViewById(R.id.windSpeed);
+        windDeg = (TextView) findViewById(R.id.windDeg);
+        imgView = (ImageView) findViewById(R.id.condIcon);*/
+
+        //maxTemp = (TextView) findViewById(R.id.textView);
+        //temp = (TextView) findViewById(R.id.textView);
+
+        //JSONWeatherTask task = new JSONWeatherTask();
+        //task.execute(new String[]{city});
+        try {
+            RetrieveWeather();
+        }
+        catch(Exception e)
+        {
+
+        }
     }
 
     @Override
@@ -52,10 +116,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
@@ -67,9 +132,74 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void goToSecondActivity()
-    {
+    private void goToSecondActivity() {
         Intent intent = new Intent(this, SecondActivity.class);
         startActivity(intent);
+    }
+
+   /* private class JSONWeatherTask extends AsyncTask<String, Void, Weather> {
+
+        @Override
+        protected Weather doInBackground(String... params) {
+            Weather weather = new Weather();
+            String data = ((new WeatherHttpClient()).getWeatherData(params[0]));
+
+            try {
+                weather = JSONWeatherParser.getWeather(data);
+
+                // Let's retrieve the icon
+                weather.iconData = ((new WeatherHttpClient()).getImage(weather.currentCondition.getIcon()));
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return weather;
+
+        }
+
+
+        @Override
+        protected void onPostExecute(Weather weather) {
+            super.onPostExecute(weather);
+
+            if (weather.iconData != null && weather.iconData.length > 0) {
+                Bitmap img = BitmapFactory.decodeByteArray(weather.iconData, 0, weather.iconData.length);
+                imgView.setImageBitmap(img);
+            }
+
+            *//*cityText.setText(weather.location.getCity() + "," + weather.location.getCountry());
+            condDescr.setText(weather.currentCondition.getCondition() + "(" + weather.currentCondition.getDescr() + ")");
+            temp.setText("" + Math.round((weather.temperature.getTemp() - 273.15)) + "�C");
+            hum.setText("" + weather.currentCondition.getHumidity() + "%");
+            press.setText("" + weather.currentCondition.getPressure() + " hPa");
+            windSpeed.setText("" + weather.wind.getSpeed() + " mps");
+            windDeg.setText("" + weather.wind.getDeg() + "�");*//*
+
+            double tempTemp = (weather.temperature.getMaxTemp() - 273.15) * ((9/5) + 32);
+
+            double tempTemp2 = (weather.temperature.getMinTemp() - 273.15) * ((9/5) + 32);
+
+            maxTemp.setText("" + Math.round(tempTemp) + "F");
+            minTemp.setText("" + Math.round(tempTemp2) + "F");
+
+        }
+    }*/
+   private void RetrieveWeather() throws IOException
+   {
+       String url = "http://api.openweathermap.org/data/2.5/weather?q=austin,tx&APPID=fefa0ed2dcc3abbe8f23b20837512564";
+
+       WeatherServiceAsync task = new WeatherServiceAsync(this);
+
+       task.execute(url);
+   }
+
+    public void SetTemperature(double temperature)
+    {
+        TextView view = (TextView) this.findViewById(R.id.textView);
+
+        DecimalFormat df = new DecimalFormat("###.##");
+        String formattedTemperature = df.format(temperature);
+
+        view.setText(formattedTemperature + "F");
     }
 }

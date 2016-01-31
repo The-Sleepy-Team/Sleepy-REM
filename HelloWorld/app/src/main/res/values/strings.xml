@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">HelloWorld</string>
 
-    <string name="hello_world">H: 80F
-    L: 40F</string>
+    <string name="hello_world">H: 80F</string>
+    <string name="hello_world2">L: 40F</string>
     <string name="second_page">Welcome to the second page!</string>
     <string name="second_page_button">Go to third page</string>
     <string name="action_settings">Settings</string>
