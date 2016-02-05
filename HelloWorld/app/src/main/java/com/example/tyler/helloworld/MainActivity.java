@@ -186,20 +186,30 @@ public class MainActivity extends AppCompatActivity {
     }*/
    private void RetrieveWeather() throws IOException
    {
-       String url = "http://api.openweathermap.org/data/2.5/weather?q=austin,tx&APPID=fefa0ed2dcc3abbe8f23b20837512564";
+       String url = "http://api.openweathermap.org/data/2.5/weather?id=5359777&APPID=fefa0ed2dcc3abbe8f23b20837512564";
 
        WeatherServiceAsync task = new WeatherServiceAsync(this);
 
        task.execute(url);
    }
 
-    public void SetTemperature(double temperature)
+    public void SetMinTemp(double temperature)
     {
         TextView view = (TextView) this.findViewById(R.id.textView);
 
         DecimalFormat df = new DecimalFormat("###.##");
         String formattedTemperature = df.format(temperature);
 
-        view.setText(formattedTemperature + "F");
+        view.setText("L: " + formattedTemperature + "F");
+    }
+
+    public void SetMaxTemp(double temperature)
+    {
+        TextView view = (TextView) this.findViewById(R.id.textView2);
+
+        DecimalFormat df = new DecimalFormat("###.##");
+        String formattedTemperature = df.format(temperature);
+
+        view.setText("H: " + formattedTemperature + "F");
     }
 }

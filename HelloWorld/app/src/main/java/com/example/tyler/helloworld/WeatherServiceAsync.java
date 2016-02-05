@@ -75,9 +75,13 @@ public class WeatherServiceAsync extends AsyncTask<String, Void, String>{
         try{
             JSONObject jsonResult = new JSONObject(test);
 
-            double temperature = jsonResult.getJSONObject("main").getDouble("temp");
-            temperature = ConvertTemperatureToFarenheit(temperature);
-            this.WeatherActivity.SetTemperature(temperature);
+            double temp_min = jsonResult.getJSONObject("main").getDouble("temp_min");
+            temp_min = ConvertTemperatureToFarenheit(temp_min);
+            this.WeatherActivity.SetMinTemp(temp_min);
+
+            double temp_max = jsonResult.getJSONObject("main").getDouble("temp_max");
+            temp_max = ConvertTemperatureToFarenheit(temp_max);
+            this.WeatherActivity.SetMaxTemp(temp_max);
 
             double pressure = jsonResult.getJSONObject("main").getDouble("pressure");
 
