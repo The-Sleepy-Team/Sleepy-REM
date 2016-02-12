@@ -5,6 +5,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,6 +15,7 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -91,6 +93,27 @@ public class MainActivity extends AppCompatActivity {
         button3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //sends SleepyRaspberryPi a WINDOW_CLOSE command
+                //then enters Second Activity
+                MailSend m = new MailSend("sleepymrwindow@gmail.com", "123abc123ABC");
+
+                String[] toArr = {"sleepyraspberrypi@gmail.com"};
+                m.setTo(toArr);
+                m.setFrom("sleepymrwindow@gmail.com");
+                m.setSubject("REQUEST_ACTION_NOW=WINDOW_CLOSE");
+                m.setBody(" ");
+
+                try {
+                    if (m.send()) {
+                        Toast.makeText(MainActivity.this, "Email was sent successfully.", Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(MainActivity.this, "Email was not sent.", Toast.LENGTH_LONG).show();
+                    }
+                } catch (Exception e) {
+                    //Toast.makeText(MailApp.this, "There was a problem sending the email.", Toast.LENGTH_LONG).show();
+                    Log.e("MailApp", "Could not send email", e);
+                }
+
                 goToSecondActivity();
             }
         });
