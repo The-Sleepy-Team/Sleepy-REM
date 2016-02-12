@@ -1,8 +1,15 @@
 <resources>
-    <string name="app_name">HelloWorld</string>
+    <string name="app_name">Mr. Window</string>
 
-    <string name="hello_world">H: 80F</string>
-    <string name="hello_world2">L: 40F</string>
+    <string name="status">Current Status</string>
+    <string name="window_status">Windows:</string>
+    <string name="blinds_status">Blinds:</string>
+    <string name="window_status2">Open - 50%</string>
+    <string name="blinds_status2">Open - 30%</string>
+    <string name="window_status3">Windows are currently set to AUTO</string>
+    <string name="blinds_status3">Blinds are currently set to AUTO</string>
+    <string name="main_button1">Set Window Schedule</string>
+    <string name="main_button2">Set Blinds Schedule</string>
     <string name="second_page">Welcome to the second page!</string>
     <string name="second_page_button">Go to third page</string>
     <string name="action_settings">Settings</string>

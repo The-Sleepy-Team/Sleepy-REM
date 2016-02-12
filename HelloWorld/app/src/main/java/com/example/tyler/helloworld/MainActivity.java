@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.content.Intent;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -59,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         setContentView(R.layout.activity_main);
 
         //String city = "London,UK";
@@ -67,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(myToolbar);
 
 
-        Button button = (Button) findViewById(R.id.button);
+       Button button = (Button) findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,8 +79,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        ImageButton button2 = (ImageButton) findViewById(R.id.button2);
+        Button button2 = (Button) findViewById(R.id.button2);
         button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToThirdActivity();
+            }
+        });
+
+        ImageButton button3 = (ImageButton) findViewById(R.id.button3);
+        button3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 goToSecondActivity();
@@ -137,6 +149,11 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    private void goToThirdActivity() {
+        Intent intent = new Intent(this, ThirdActivity.class);
+        startActivity(intent);
+    }
+
    /* private class JSONWeatherTask extends AsyncTask<String, Void, Weather> {
 
         @Override
@@ -193,17 +210,17 @@ public class MainActivity extends AppCompatActivity {
        task.execute(url);
    }
 
-    public void SetMinTemp(double temperature)
+    public void SetTemp(double temperature)
     {
         TextView view = (TextView) this.findViewById(R.id.textView);
 
         DecimalFormat df = new DecimalFormat("###.##");
         String formattedTemperature = df.format(temperature);
 
-        view.setText("L: " + formattedTemperature + "F");
+        view.setText(formattedTemperature + "F");
     }
 
-    public void SetMaxTemp(double temperature)
+/*    public void SetMaxTemp(double temperature)
     {
         TextView view = (TextView) this.findViewById(R.id.textView2);
 
@@ -212,4 +229,15 @@ public class MainActivity extends AppCompatActivity {
 
         view.setText("H: " + formattedTemperature + "F");
     }
+
+        public void SetMinTemp(double temperature)
+    {
+        TextView view = (TextView) this.findViewById(R.id.textView);
+
+        DecimalFormat df = new DecimalFormat("###.##");
+        String formattedTemperature = df.format(temperature);
+
+        view.setText("L: " + formattedTemperature + "F");
+    }
+    */
 }
