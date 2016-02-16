@@ -2,13 +2,17 @@ package com.example.tyler.helloworld;
 
 import android.app.ActionBar;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
 import android.widget.Spinner;
 
@@ -33,6 +37,9 @@ import java.util.List;
 
 public class SecondActivity extends AppCompatActivity {
 
+    private SharedPreferences prefs;
+    private String prefName = "MyPrefs";
+    int id=0;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -51,35 +58,107 @@ public class SecondActivity extends AppCompatActivity {
 
         ab.setDisplayHomeAsUpEnabled(true);
 
-        Button button = (Button) findViewById(R.id.button);
+        /*Button button = (Button) findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 goToThirdActivity();
             }
+        });*/
+
+        Button button = (Button) findViewById(R.id.button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //sends SleepyRaspberryPi a WINDOW_CLOSE command
+                //then enters Second Activity
+                MailSend m = new MailSend("sleepymrwindow@gmail.com", "123abc123ABC");
+
+                String[] toArr = {"sleepyraspberrypi@gmail.com"};
+                m.setTo(toArr);
+                m.setFrom("sleepymrwindow@gmail.com");
+                m.setSubject("REQUEST_ACTION_NOW=WINDOW_OPEN");
+                m.setBody(" ");
+
+                try {
+                    if (m.send()) {
+                        Toast.makeText(SecondActivity.this, "Email was sent successfully.", Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(SecondActivity.this, "Email was not sent.", Toast.LENGTH_LONG).show();
+                    }
+                } catch (Exception e) {
+                    //Toast.makeText(MailApp.this, "There was a problem sending the email.", Toast.LENGTH_LONG).show();
+                    Log.e("MailApp", "Could not send email", e);
+                }
+
+            }
         });
 
-        modifySpinner();
+        Button button2 = (Button) findViewById(R.id.button2);
+        button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //sends SleepyRaspberryPi a WINDOW_CLOSE command
+                //then enters Second Activity
+                MailSend m = new MailSend("sleepymrwindow@gmail.com", "123abc123ABC");
 
-        spinner = (Spinner)findViewById(R.id.spinner);
+                String[] toArr = {"sleepyraspberrypi@gmail.com"};
+                m.setTo(toArr);
+                m.setFrom("sleepymrwindow@gmail.com");
+                m.setSubject("REQUEST_ACTION_NOW=WINDOW_CLOSE");
+                m.setBody(" ");
+
+                try {
+                    if (m.send()) {
+                        Toast.makeText(SecondActivity.this, "Email was sent successfully.", Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(SecondActivity.this, "Email was not sent.", Toast.LENGTH_LONG).show();
+                    }
+                } catch (Exception e) {
+                    //Toast.makeText(MailApp.this, "There was a problem sending the email.", Toast.LENGTH_LONG).show();
+                    Log.e("MailApp", "Could not send email", e);
+                }
+
+            }
+        });
+
+        final List<String> list = new ArrayList<String>();
+        list.add("AUTO");
+        list.add("MANUAL");
+
+        final Spinner spinner =(Spinner) findViewById(R.id.spinner);
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, list);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(dataAdapter);
+
+        prefs = getSharedPreferences(prefName, 0);
+        id = prefs.getInt("last_val",0);
+        spinner.setSelection(id);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                prefs = getSharedPreferences(prefName, 0);
+                SharedPreferences.Editor editor = prefs.edit();
+
+                editor.putInt("last_val", position);
+                editor.putString("mode", spinner.getSelectedItem().toString());
+
+                editor.apply();
+
+            }
+
+            public void onNothingSelected(AdapterView<?> arg0) {
+                // TODO Auto-generated method stub
+
+            }
+        });
 
 
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
-    }
-
-    public void modifySpinner() {
-        spinner = (Spinner) findViewById(R.id.spinner);
-        List<String> list = new ArrayList<String>();
-        list.add("Manual");
-        list.add("Auto");
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item, list);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(dataAdapter);
-
-
     }
 
     private void goToThirdActivity() {
@@ -126,4 +205,7 @@ public class SecondActivity extends AppCompatActivity {
         AppIndex.AppIndexApi.end(client, viewAction);
         client.disconnect();
     }
+
+
 }
+

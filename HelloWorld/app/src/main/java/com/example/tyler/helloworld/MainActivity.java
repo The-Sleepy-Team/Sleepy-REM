@@ -1,5 +1,7 @@
 package com.example.tyler.helloworld;
 
+import android.app.Application;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -41,8 +43,6 @@ import android.view.Menu;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-
-
 public class MainActivity extends AppCompatActivity {
 
 /*    private TextView cityText;
@@ -60,6 +60,9 @@ public class MainActivity extends AppCompatActivity {
 
     //private TextView temp;
 
+    private SharedPreferences preferenceSettingsUnique;
+    private SharedPreferences.Editor preferenceEditorUnique;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +75,13 @@ public class MainActivity extends AppCompatActivity {
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
 
+        //Preferences pref = new Preferences(getApplicationContext());
+
+        preferenceSettingsUnique = getSharedPreferences("MyPrefs", 0);
+        preferenceEditorUnique = preferenceSettingsUnique.edit();
+
+        TextView view = (TextView) this.findViewById(R.id.current_status6);
+        view.setText("Windows are currently set to "  + preferenceSettingsUnique.getString("mode", "AUTO"));
 
        Button button = (Button) findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {

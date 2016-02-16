@@ -6,14 +6,19 @@
     <string name="blinds_status">Blinds:</string>
     <string name="window_status2">Open - 50%</string>
     <string name="blinds_status2">Open - 30%</string>
-    <string name="window_status3">Windows are currently set to AUTO</string>
+    <string name="window_status3">Windows are currently set to </string>
     <string name="blinds_status3">Blinds are currently set to AUTO</string>
     <string name="main_button1">Set Window Schedule</string>
     <string name="main_button2">Set Blinds Schedule</string>
-    <string name="second_page">Welcome to the second page!</string>
+
+    <string name="title_activity_second">Window Schedule</string>
+    <string name="second_page">Mode: </string>
+    <string name="button1">Open Window</string>
+    <string name="button2">Close Window</string>
+
     <string name="second_page_button">Go to third page</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_second">SecondActivity</string>
+
     <string name="title_activity_settings">Settings</string>
     <string name="settings_page">This is the settings page!</string>
     <string name="title_activity_third">ThirdActivity</string>

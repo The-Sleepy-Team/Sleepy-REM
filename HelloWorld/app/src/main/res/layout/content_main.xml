@@ -216,7 +216,6 @@
 
                 <TextView
                     android:id="@+id/current_status6"
-                    android:text= "@string/window_status3"
                     android:textSize="17sp"
                     android:layout_width="0dp"
                     android:layout_weight="1"
