@@ -72,12 +72,13 @@ public class WeatherServiceAsync extends AsyncTask<String, Void, String>{
     @Override
     protected void onPostExecute(String result){
         String test = result;
-        try{
-            JSONObject jsonResult = new JSONObject(test);
+        if(result!=null) {
+            try {
+                JSONObject jsonResult = new JSONObject(test);
 
-            double temp = jsonResult.getJSONObject("main").getDouble("temp");
-            temp = ConvertTemperatureToFarenheit(temp);
-            this.WeatherActivity.SetTemp(temp);
+                double temp = jsonResult.getJSONObject("main").getDouble("temp");
+                temp = ConvertTemperatureToFarenheit(temp);
+                this.WeatherActivity.SetTemp(temp);
 
 /*            double temp_min = jsonResult.getJSONObject("main").getDouble("temp_min");
             temp_min = ConvertTemperatureToFarenheit(temp_min);
@@ -87,13 +88,15 @@ public class WeatherServiceAsync extends AsyncTask<String, Void, String>{
             temp_max = ConvertTemperatureToFarenheit(temp_max);
             this.WeatherActivity.SetMaxTemp(temp_max);*/
 
-            double pressure = jsonResult.getJSONObject("main").getDouble("pressure");
+                double pressure = jsonResult.getJSONObject("main").getDouble("pressure");
 
-            double humidity = jsonResult.getJSONObject("main").getDouble("humidity");
+                double humidity = jsonResult.getJSONObject("main").getDouble("humidity");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
-        catch (JSONException e)
-        {
-            e.printStackTrace();
+        else{
+            this.WeatherActivity.SetError();
         }
     }
 

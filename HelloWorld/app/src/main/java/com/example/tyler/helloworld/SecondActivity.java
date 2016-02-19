@@ -82,9 +82,9 @@ public class SecondActivity extends AppCompatActivity {
 
                 try {
                     if (m.send()) {
-                        Toast.makeText(SecondActivity.this, "Email was sent successfully.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(SecondActivity.this, "Window Opening Now.", Toast.LENGTH_LONG).show();
                     } else {
-                        Toast.makeText(SecondActivity.this, "Email was not sent.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(SecondActivity.this, "Communication Error.", Toast.LENGTH_LONG).show();
                     }
                 } catch (Exception e) {
                     //Toast.makeText(MailApp.this, "There was a problem sending the email.", Toast.LENGTH_LONG).show();
@@ -110,9 +110,9 @@ public class SecondActivity extends AppCompatActivity {
 
                 try {
                     if (m.send()) {
-                        Toast.makeText(SecondActivity.this, "Email was sent successfully.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(SecondActivity.this, "Window Closing Now.", Toast.LENGTH_LONG).show();
                     } else {
-                        Toast.makeText(SecondActivity.this, "Email was not sent.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(SecondActivity.this, "Communication Error.", Toast.LENGTH_LONG).show();
                     }
                 } catch (Exception e) {
                     //Toast.makeText(MailApp.this, "There was a problem sending the email.", Toast.LENGTH_LONG).show();

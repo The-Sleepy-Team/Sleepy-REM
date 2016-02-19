@@ -148,7 +148,6 @@ public class MainActivity extends AppCompatActivity {
         }
         catch(Exception e)
         {
-
         }
     }
 
@@ -251,6 +250,12 @@ public class MainActivity extends AppCompatActivity {
         String formattedTemperature = df.format(temperature);
 
         view.setText(formattedTemperature + "F");
+    }
+
+    public void SetError()
+    {
+        TextView view2 = (TextView) this.findViewById(R.id.textView);
+        view2.setText("Weather Unavailable.");
     }
 
 /*    public void SetMaxTemp(double temperature)

@@ -15,6 +15,10 @@
     <string name="second_page">Mode: </string>
     <string name="button1">Open Window</string>
     <string name="button2">Close Window</string>
+    <string name="inside">Inside</string>
+    <string name="outside">Outside</string>
+    <string name="insideTemp">Weather</string>
+    <string name="outsideTemp">Weather</string>
 
     <string name="second_page_button">Go to third page</string>
     <string name="action_settings">Settings</string>
