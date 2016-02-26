@@ -31,6 +31,8 @@ import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,7 +41,10 @@ public class SecondActivity extends AppCompatActivity {
 
     private SharedPreferences prefs;
     private String prefName = "MyPrefs";
+    private SharedPreferences preferenceSettingsUnique;
+    private SharedPreferences.Editor preferenceEditorUnique;
     int id=0;
+    int id2=0;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -70,7 +75,7 @@ public class SecondActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //sends SleepyRaspberryPi a WINDOW_CLOSE command
+                //sends SleepyRaspberryPi a WINDOW_OPEN command
                 //then enters Second Activity
                 MailSend m = new MailSend("sleepymrwindow@gmail.com", "123abc123ABC");
 
@@ -142,9 +147,38 @@ public class SecondActivity extends AppCompatActivity {
                 SharedPreferences.Editor editor = prefs.edit();
 
                 editor.putInt("last_val", position);
-                editor.putString("mode", spinner.getSelectedItem().toString());
+                String mode = spinner.getSelectedItem().toString();
+                editor.putString("mode", mode);
 
                 editor.apply();
+
+               /* if(mode == "AUTO")
+                {
+                    Toast.makeText(SecondActivity.this, "Please make sure that the selected Auto temperature is correct.", Toast.LENGTH_LONG).show();
+
+                    preferenceSettingsUnique = getSharedPreferences("MyPrefs", 0);
+                    preferenceEditorUnique = preferenceSettingsUnique.edit();
+
+                    //sends SleepyRaspberryPi a SET_DESIRED_TEMP command
+                    MailSend m = new MailSend("sleepymrwindow@gmail.com", "123abc123ABC");
+
+                    String[] toArr = {"sleepyraspberrypi@gmail.com"};
+                    m.setTo(toArr);
+                    m.setFrom("sleepymrwindow@gmail.com");
+                    m.setSubject("REQUEST_ACTION_NOW=SET_DESIRED_TEMP, " + preferenceSettingsUnique.getString("auto_temp", "60"));
+                    m.setBody(" ");
+
+                    try {
+                        if (m.send()) {
+                            Toast.makeText(SecondActivity.this, "Temperature Set to " + preferenceSettingsUnique.getString("auto_temp", "60"), Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(SecondActivity.this, "Communication Error.", Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (Exception e) {
+                        //Toast.makeText(MailApp.this, "There was a problem sending the email.", Toast.LENGTH_LONG).show();
+                        Log.e("MailApp", "Could not send email", e);
+                    }
+                }*/
 
             }
 
@@ -154,7 +188,84 @@ public class SecondActivity extends AppCompatActivity {
             }
         });
 
+        final List<String> list2 = new ArrayList<String>();
+        list2.add("60");
+        list2.add("62");
+        list2.add("64");
+        list2.add("66");
+        list2.add("68");
+        list2.add("70");
+        list2.add("72");
+        list2.add("74");
+        list2.add("76");
+        list2.add("78");
+        list2.add("80");
 
+        final Spinner spinner2 =(Spinner) findViewById(R.id.spinner2);
+        ArrayAdapter<String> dataAdapter2 = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, list2);
+        dataAdapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner2.setAdapter(dataAdapter2);
+
+        prefs = getSharedPreferences(prefName, 0);
+        id2 = prefs.getInt("last_val2",0);
+        spinner2.setSelection(id2);
+
+        spinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                prefs = getSharedPreferences(prefName, 0);
+                SharedPreferences.Editor editor = prefs.edit();
+
+                String mode = prefs.getString("mode", "AUTO");
+
+                if (mode == "AUTO" & (id2 != position)) {
+
+                    editor.putInt("last_val2", position);
+                    String selected_item = spinner2.getSelectedItem().toString();
+                    editor.putString("auto_temp", spinner2.getSelectedItem().toString());
+
+                    editor.apply();
+
+                    //sends SleepyRaspberryPi a SET_DESIRED_TEMP command
+                    MailSend m = new MailSend("sleepymrwindow@gmail.com", "123abc123ABC");
+
+                    String[] toArr = {"sleepyraspberrypi@gmail.com"};
+                    m.setTo(toArr);
+                    m.setFrom("sleepymrwindow@gmail.com");
+                    m.setSubject("REQUEST_ACTION_NOW=SET_DESIRED_TEMP, " + selected_item);
+                    m.setBody(" ");
+
+                    try {
+                        if (m.send()) {
+                            Toast.makeText(SecondActivity.this, "Auto temperature has been set to " + selected_item + " F.", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(SecondActivity.this, "Communication Error.", Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (Exception e) {
+                        //Toast.makeText(MailApp.this, "There was a problem sending the email.", Toast.LENGTH_LONG).show();
+                        Log.e("MailApp", "Could not send email", e);
+                    }
+
+                }
+                if (mode == "MANUAL" & (id2 != position))
+                {
+                    Toast.makeText(SecondActivity.this, "Please change mode to AUTO to change this setting.", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            public void onNothingSelected(AdapterView<?> arg0) {
+                // TODO Auto-generated method stub
+
+            }
+        });
+
+        try{
+            RetrieveWeather();
+        }
+        catch(Exception e)
+        {
+
+        }
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -206,6 +317,30 @@ public class SecondActivity extends AppCompatActivity {
         client.disconnect();
     }
 
-
+    private void RetrieveWeather() throws IOException
+    {
+        String url = "http://api.openweathermap.org/data/2.5/weather?id=5359777&APPID=fefa0ed2dcc3abbe8f23b20837512564";
+        WeatherServiceAsync2 task = new WeatherServiceAsync2(this);
+        task.execute(url);
+    }
+    public void SetTemp(double temperature)
+    {
+        TextView view = (TextView) this.findViewById(R.id.outsideTemp);
+        DecimalFormat df = new DecimalFormat("###.##");
+        String formattedTemperature = df.format(temperature);
+        view.setText(formattedTemperature + "F");
+    }
+    public void setOutsideWeather(String forecast, double temperature)
+    {
+        TextView view = (TextView) this.findViewById(R.id.outsideTemp);
+        DecimalFormat df = new DecimalFormat("###.##");
+        String formattedTemperature = df.format(temperature);
+        view.setText(formattedTemperature + "F" + "\n" + forecast);
+    }
+    public void SetError()
+    {
+        TextView view2 = (TextView) this.findViewById(R.id.outsideTemp);
+        view2.setText("Weather Unavailable.");
+    }
 }
 

@@ -19,6 +19,10 @@
     <string name="outside">Outside</string>
     <string name="insideTemp">Weather</string>
     <string name="outsideTemp">Weather</string>
+    <string name="auto_separator">Auto Settings</string>
+    <string name="auto_select">Auto Temperature: </string>
+    <string name="auto_select2">F</string>
+    <string name="manual_separator">Manual Settings</string>
 
     <string name="second_page_button">Go to third page</string>
     <string name="action_settings">Settings</string>

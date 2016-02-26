@@ -80,8 +80,16 @@ public class MainActivity extends AppCompatActivity {
         preferenceSettingsUnique = getSharedPreferences("MyPrefs", 0);
         preferenceEditorUnique = preferenceSettingsUnique.edit();
 
+        //Here for testing purposes
+        //preferenceEditorUnique.clear().commit();
+
         TextView view = (TextView) this.findViewById(R.id.current_status6);
-        view.setText("Windows are currently set to "  + preferenceSettingsUnique.getString("mode", "AUTO"));
+        if (preferenceSettingsUnique.getString("mode", "AUTO") == "AUTO") {
+            view.setText("Windows are currently set to " + preferenceSettingsUnique.getString("mode", "AUTO") + ", " + preferenceSettingsUnique.getString("auto_temp", "60")+ "F");
+        }
+        else{
+            view.setText("Windows are currently set to " + preferenceSettingsUnique.getString("mode", "AUTO"));
+        }
 
        Button button = (Button) findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
