@@ -156,7 +156,7 @@ public class SecondActivity extends AppCompatActivity {
                 {
                     Toast.makeText(SecondActivity.this, "Please make sure that the selected Auto temperature is correct.", Toast.LENGTH_LONG).show();
 
-                    preferenceSettingsUnique = getSharedPreferences("MyPrefs", 0);
+                    prefs = getSharedPreferences(prefName, 0);
                     preferenceEditorUnique = preferenceSettingsUnique.edit();
 
                     //sends SleepyRaspberryPi a SET_DESIRED_TEMP command
