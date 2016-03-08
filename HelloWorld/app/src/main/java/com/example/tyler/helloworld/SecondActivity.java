@@ -3,6 +3,8 @@ package com.example.tyler.helloworld;
 import android.app.ActionBar;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -35,6 +37,10 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.*;
+import com.jjoe64.graphview.LegendRenderer;
 
 
 public class SecondActivity extends AppCompatActivity {
@@ -270,6 +276,87 @@ public class SecondActivity extends AppCompatActivity {
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+
+        GraphView graph = (GraphView) findViewById(R.id.graph);
+        graph.setTitle("Temperature Forecast");
+
+        graph.getViewport().setXAxisBoundsManual(true);
+        graph.getViewport().setMinX(0);
+        graph.getViewport().setMaxX(24);
+        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(new DataPoint[] {
+                new DataPoint(0, 48),
+                new DataPoint(1, 48),
+                new DataPoint(2, 48),
+                new DataPoint(3, 47),
+                new DataPoint(4, 47),
+                new DataPoint(5, 47),
+                new DataPoint(6, 48),
+                new DataPoint(7, 48),
+                new DataPoint(8, 48),
+                new DataPoint(9, 48),
+                new DataPoint(10, 57),
+                new DataPoint(11, 57),
+                new DataPoint(12, 57),
+                new DataPoint(13, 64),
+                new DataPoint(14, 64),
+                new DataPoint(15, 64),
+                new DataPoint(16, 66),
+                new DataPoint(17, 66),
+                new DataPoint(18, 66),
+                new DataPoint(19, 62),
+                new DataPoint(20, 62),
+                new DataPoint(21, 62),
+                new DataPoint(22, 57),
+                new DataPoint(23, 57),
+                new DataPoint(24, 57)
+        });
+        LineGraphSeries<DataPoint> series2 = new LineGraphSeries<DataPoint>(new DataPoint[] {
+                new DataPoint(0, 65),
+                new DataPoint(1.5, 65),
+                new DataPoint(2, 65),
+                new DataPoint(3, 65),
+                new DataPoint(4, 65),
+                new DataPoint(5, 65),
+                new DataPoint(6, 65),
+                new DataPoint(7, 65),
+                new DataPoint(8, 65),
+                new DataPoint(9, 65),
+                new DataPoint(10, 65),
+                new DataPoint(11, 65),
+                new DataPoint(12, 65),
+                new DataPoint(13, 65),
+                new DataPoint(14, 65),
+                new DataPoint(15, 65),
+                new DataPoint(16, 65),
+                new DataPoint(17, 65),
+                new DataPoint(18, 65),
+                new DataPoint(19, 65),
+                new DataPoint(20, 65),
+                new DataPoint(21, 65),
+                new DataPoint(22, 65),
+                new DataPoint(23, 65),
+                new DataPoint(24, 65)
+        });
+        LineGraphSeries<DataPoint> series3 = new LineGraphSeries<DataPoint>(new DataPoint[] {
+                new DataPoint(0, 70),
+                new DataPoint(24, 70)
+        });
+        graph.getGridLabelRenderer().setVerticalAxisTitle("Temperature (F)");
+        graph.getGridLabelRenderer().setHorizontalAxisTitle("Time (24 hour clock)");
+        graph.addSeries(series);
+        graph.addSeries(series2);
+        graph.addSeries(series3);
+        series.setTitle("Forecasted Temperature");
+        series2.setTitle("Desired Temperature");
+        series3.setTitle("Actual Temperature");
+        Paint p1 = new Paint();
+        Paint p2 = new Paint();
+        Paint p3 = new Paint();
+        series.setColor(Color.BLACK);
+        series2.setColor(Color.BLUE);
+        series3.setColor(Color.GREEN);
+        graph.getLegendRenderer().setVisible(true);
+        graph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
     }
 
     private void goToThirdActivity() {
