@@ -119,15 +119,21 @@
 
                 <Space
                     android:layout_width="10dp"
-                    android:layout_height="10dp"/>
+                    android:layout_height="20dp"/>
 
             </LinearLayout>
 
             <LinearLayout>
                 <com.jjoe64.graphview.GraphView
-                    android:layout_width="match_parent"
-                    android:layout_height="200dip"
-                    android:id="@+id/graph" />
+                    android:layout_height="200dp"
+                    android:layout_weight="0"
+                    android:id="@+id/graph"
+                    android:layout_width="wrap_content" />
+
+                <Space
+                    android:layout_width="100dp"
+                    android:layout_height="10dp"
+                    android:layout_weight="1"/>
             </LinearLayout>
 
             <LinearLayout

@@ -84,9 +84,13 @@ public class MainActivity extends AppCompatActivity {
         preferenceSettingsUnique = getSharedPreferences("MyPrefs", 0);
         preferenceEditorUnique = preferenceSettingsUnique.edit();
 
+        //Here for testing purposes
+        //preferenceEditorUnique.clear().commit();
+
         boolean initialized = preferenceSettingsUnique.getBoolean(INITIALIZED, Boolean.FALSE);
 
         if(!initialized){
+
             preferenceEditorUnique.putBoolean(INITIALIZED, Boolean.TRUE);
 
             preferenceEditorUnique.putInt("last_val", 0);

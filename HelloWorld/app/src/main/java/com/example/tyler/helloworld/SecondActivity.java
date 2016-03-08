@@ -300,6 +300,7 @@ public class SecondActivity extends AppCompatActivity {
         graph.getViewport().setXAxisBoundsManual(true);
         graph.getViewport().setMinX(0);
         graph.getViewport().setMaxX(24);
+        graph.getViewport().setScrollable(true);
         LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(new DataPoint[] {
                 new DataPoint(0, 48),
                 new DataPoint(1, 48),
@@ -358,8 +359,10 @@ public class SecondActivity extends AppCompatActivity {
                 new DataPoint(0, 70),
                 new DataPoint(24, 70)
         });
+
         graph.getGridLabelRenderer().setVerticalAxisTitle("Temperature (F)");
         graph.getGridLabelRenderer().setHorizontalAxisTitle("Time (24 hour clock)");
+        graph.getGridLabelRenderer().setPadding(30);
         graph.addSeries(series);
         graph.addSeries(series2);
         graph.addSeries(series3);
@@ -373,7 +376,9 @@ public class SecondActivity extends AppCompatActivity {
         series2.setColor(Color.BLUE);
         series3.setColor(Color.GREEN);
         graph.getLegendRenderer().setVisible(true);
-        graph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+        graph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.BOTTOM);
+        graph.getLegendRenderer().setTextSize(16);
+        //graph.setPadding(100, 100, 100, 100);
     }
 
     private void goToThirdActivity() {
