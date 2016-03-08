@@ -83,23 +83,32 @@ public class SecondActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //sends SleepyRaspberryPi a WINDOW_OPEN command
                 //then enters Second Activity
-                MailSend m = new MailSend("sleepymrwindow@gmail.com", "123abc123ABC");
+                prefs = getSharedPreferences(prefName, 0);
+                String mode = prefs.getString("mode","AUTO");
 
-                String[] toArr = {"sleepyraspberrypi@gmail.com"};
-                m.setTo(toArr);
-                m.setFrom("sleepymrwindow@gmail.com");
-                m.setSubject("REQUEST_ACTION_NOW=WINDOW_OPEN");
-                m.setBody(" ");
+                if (mode.equals("MANUAL")) {
+                    MailSend m = new MailSend("sleepymrwindow@gmail.com", "123abc123ABC");
 
-                try {
-                    if (m.send()) {
-                        Toast.makeText(SecondActivity.this, "Window Opening Now.", Toast.LENGTH_LONG).show();
-                    } else {
-                        Toast.makeText(SecondActivity.this, "Communication Error.", Toast.LENGTH_LONG).show();
+                    String[] toArr = {"sleepyraspberrypi@gmail.com"};
+                    m.setTo(toArr);
+                    m.setFrom("sleepymrwindow@gmail.com");
+                    m.setSubject("REQUEST_ACTION_NOW=WINDOW_OPEN");
+                    m.setBody(" ");
+
+                    try {
+                        if (m.send()) {
+                            Toast.makeText(SecondActivity.this, "Window Opening Now.", Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(SecondActivity.this, "Communication Error.", Toast.LENGTH_LONG).show();
+                        }
+                    } catch (Exception e) {
+                        //Toast.makeText(MailApp.this, "There was a problem sending the email.", Toast.LENGTH_LONG).show();
+                        Log.e("MailApp", "Could not send email", e);
                     }
-                } catch (Exception e) {
-                    //Toast.makeText(MailApp.this, "There was a problem sending the email.", Toast.LENGTH_LONG).show();
-                    Log.e("MailApp", "Could not send email", e);
+                }
+                else
+                {
+                    Toast.makeText(SecondActivity.this, "Please set mode to MANUAL to use.", Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -111,23 +120,31 @@ public class SecondActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //sends SleepyRaspberryPi a WINDOW_CLOSE command
                 //then enters Second Activity
-                MailSend m = new MailSend("sleepymrwindow@gmail.com", "123abc123ABC");
+                prefs = getSharedPreferences(prefName, 0);
+                String mode = prefs.getString("mode","AUTO");
+                if(mode.equals("MANUAL")) {
+                    MailSend m = new MailSend("sleepymrwindow@gmail.com", "123abc123ABC");
 
-                String[] toArr = {"sleepyraspberrypi@gmail.com"};
-                m.setTo(toArr);
-                m.setFrom("sleepymrwindow@gmail.com");
-                m.setSubject("REQUEST_ACTION_NOW=WINDOW_CLOSE");
-                m.setBody(" ");
+                    String[] toArr = {"sleepyraspberrypi@gmail.com"};
+                    m.setTo(toArr);
+                    m.setFrom("sleepymrwindow@gmail.com");
+                    m.setSubject("REQUEST_ACTION_NOW=WINDOW_CLOSE");
+                    m.setBody(" ");
 
-                try {
-                    if (m.send()) {
-                        Toast.makeText(SecondActivity.this, "Window Closing Now.", Toast.LENGTH_LONG).show();
-                    } else {
-                        Toast.makeText(SecondActivity.this, "Communication Error.", Toast.LENGTH_LONG).show();
+                    try {
+                        if (m.send()) {
+                            Toast.makeText(SecondActivity.this, "Window Closing Now.", Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(SecondActivity.this, "Communication Error.", Toast.LENGTH_LONG).show();
+                        }
+                    } catch (Exception e) {
+                        //Toast.makeText(MailApp.this, "There was a problem sending the email.", Toast.LENGTH_LONG).show();
+                        Log.e("MailApp", "Could not send email", e);
                     }
-                } catch (Exception e) {
-                    //Toast.makeText(MailApp.this, "There was a problem sending the email.", Toast.LENGTH_LONG).show();
-                    Log.e("MailApp", "Could not send email", e);
+                }
+                else
+                {
+                    Toast.makeText(SecondActivity.this, "Please set mode to MANUAL to use.", Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -213,7 +230,7 @@ public class SecondActivity extends AppCompatActivity {
         spinner2.setAdapter(dataAdapter2);
 
         prefs = getSharedPreferences(prefName, 0);
-        id2 = prefs.getInt("last_val2",0);
+        id2 = prefs.getInt("last_val2", 0);
         spinner2.setSelection(id2);
 
         spinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -221,10 +238,10 @@ public class SecondActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 prefs = getSharedPreferences(prefName, 0);
                 SharedPreferences.Editor editor = prefs.edit();
-
+                id2 = prefs.getInt("last_val2",0);
                 String mode = prefs.getString("mode", "AUTO");
 
-                if (mode == "AUTO" & (id2 != position)) {
+                if (mode.equals("AUTO") & (id2 != position)) {
 
                     editor.putInt("last_val2", position);
                     String selected_item = spinner2.getSelectedItem().toString();
@@ -253,7 +270,7 @@ public class SecondActivity extends AppCompatActivity {
                     }
 
                 }
-                if (mode == "MANUAL" & (id2 != position))
+                if (mode.equals("MANUAL") & (id2 != position))
                 {
                     Toast.makeText(SecondActivity.this, "Please change mode to AUTO to change this setting.", Toast.LENGTH_SHORT).show();
                 }
