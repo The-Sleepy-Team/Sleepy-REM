@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="libs">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/HelloWorld/app/libs/activation.jar!/" />
+      <root url="jar://$PROJECT_DIR$/HelloWorld/app/libs/mail.jar!/" />
+      <root url="jar://$PROJECT_DIR$/HelloWorld/app/libs/additionnal.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

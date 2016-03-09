@@ -111,7 +111,11 @@ public class MainActivity extends AppCompatActivity {
             view.setText("Windows are currently set to " + preferenceSettingsUnique.getString("mode", "AUTO"));
         }
 
-       Button button = (Button) findViewById(R.id.button);
+        //Reading window and blind position from email and displaying
+
+        TextView window_pos = (TextView) this.findViewById(R.id.current_status4);
+
+        Button button = (Button) findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
