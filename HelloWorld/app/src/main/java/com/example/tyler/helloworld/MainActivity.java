@@ -43,6 +43,8 @@ import android.view.Menu;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import static java.lang.System.out;
+
 public class MainActivity extends AppCompatActivity {
 
 /*    private TextView cityText;
@@ -62,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
 
     private SharedPreferences preferenceSettingsUnique;
     private SharedPreferences.Editor preferenceEditorUnique;
+
+    public static final String INITIALIZED = "initialized";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,8 +87,24 @@ public class MainActivity extends AppCompatActivity {
         //Here for testing purposes
         //preferenceEditorUnique.clear().commit();
 
+        boolean initialized = preferenceSettingsUnique.getBoolean(INITIALIZED, Boolean.FALSE);
+
+        if(!initialized){
+
+            preferenceEditorUnique.putBoolean(INITIALIZED, Boolean.TRUE);
+
+            preferenceEditorUnique.putInt("last_val", 0);
+            preferenceEditorUnique.putString("mode", "AUTO");
+            preferenceEditorUnique.putInt("last_val2", 0);
+            preferenceEditorUnique.putString("auto_temp", "60");
+            preferenceEditorUnique.commit();
+        }
+
+        //Here for testing purposes
+        //preferenceEditorUnique.clear().commit();
+
         TextView view = (TextView) this.findViewById(R.id.current_status6);
-        if (preferenceSettingsUnique.getString("mode", "AUTO") == "AUTO") {
+        if (preferenceSettingsUnique.getString("mode", "AUTO").equals("AUTO")) {
             view.setText("Windows are currently set to " + preferenceSettingsUnique.getString("mode", "AUTO") + ", " + preferenceSettingsUnique.getString("auto_temp", "60")+ "F");
         }
         else{

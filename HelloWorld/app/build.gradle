@@ -29,4 +29,5 @@ dependencies {
     compile files('libs/activation.jar')
     compile files('libs/mail.jar')
     compile 'com.google.android.gms:play-services-appindexing:8.1.0'
+    compile 'com.jjoe64:graphview:4.0.1'
 }
