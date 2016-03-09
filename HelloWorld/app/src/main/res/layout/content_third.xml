@@ -12,13 +12,67 @@
     tools:context="com.example.tyler.helloworld.ThirdActivity"
     tools:showIn="@layout/activity_third">
 
-    <TextView
+<!--    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/third_page"
         android:id="@+id/text2"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="190dp" />
+        android:layout_marginTop="190dp" />-->
+
+    <ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/ScrollView01"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/abc_action_bar_default_height_material">
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:columnCount="2"
+            android:rowCount="25">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="20dp"/>
+
+                <ImageView
+                    android:id="@+id/blindPic"
+                    android:layout_width="80dp"
+                    android:layout_height="140dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/blinds_closed"
+                    android:background="#00000000"/>
+
+                <TextView
+                    android:text="@string/blindStatus"
+                    android:id="@+id/blindStatus"
+                    android:layout_width="0dp"
+                    android:textSize="25sp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:layout_gravity="center_vertical"
+                    android:textAlignment="center" />
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="20dp"/>
+
+            </LinearLayout>
+
+        </GridLayout>
+
+    </ScrollView>
 
 </RelativeLayout>

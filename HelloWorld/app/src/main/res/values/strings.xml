@@ -24,12 +24,12 @@
     <string name="auto_select2">F</string>
     <string name="manual_separator">Manual Settings</string>
 
-    <string name="second_page_button">Go to third page</string>
     <string name="action_settings">Settings</string>
 
     <string name="title_activity_settings">Settings</string>
     <string name="settings_page">This is the settings page!</string>
-    <string name="title_activity_third">ThirdActivity</string>
-    <string name="third_page">Welcome to the third page!</string>
+
+    <string name="title_activity_third">Blinds Schedule</string>
+    <string name="blindStatus">This is the Blinds Schedule Page!</string>
 
 </resources>
