@@ -175,25 +175,20 @@ public class SecondActivity extends AppCompatActivity {
 
                 editor.apply();
 
-               /* if(mode == "AUTO")
+               if(mode.equals("AUTO"))
                 {
-                    Toast.makeText(SecondActivity.this, "Please make sure that the selected Auto temperature is correct.", Toast.LENGTH_LONG).show();
-
-                    prefs = getSharedPreferences(prefName, 0);
-                    preferenceEditorUnique = preferenceSettingsUnique.edit();
-
                     //sends SleepyRaspberryPi a SET_DESIRED_TEMP command
                     MailSend m = new MailSend("sleepymrwindow@gmail.com", "123abc123ABC");
 
                     String[] toArr = {"sleepyraspberrypi@gmail.com"};
                     m.setTo(toArr);
                     m.setFrom("sleepymrwindow@gmail.com");
-                    m.setSubject("REQUEST_ACTION_NOW=SET_DESIRED_TEMP, " + preferenceSettingsUnique.getString("auto_temp", "60"));
+                    m.setSubject("REQUEST_ACTION_NOW=SET_MODE, AUTO");
                     m.setBody(" ");
 
                     try {
                         if (m.send()) {
-                            Toast.makeText(SecondActivity.this, "Temperature Set to " + preferenceSettingsUnique.getString("auto_temp", "60"), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SecondActivity.this, "Please make sure that the selected Auto temperature is correct.", Toast.LENGTH_LONG).show();
                         } else {
                             Toast.makeText(SecondActivity.this, "Communication Error.", Toast.LENGTH_SHORT).show();
                         }
@@ -201,7 +196,28 @@ public class SecondActivity extends AppCompatActivity {
                         //Toast.makeText(MailApp.this, "There was a problem sending the email.", Toast.LENGTH_LONG).show();
                         Log.e("MailApp", "Could not send email", e);
                     }
-                }*/
+                }
+                else {
+                   //sends SleepyRaspberryPi a SET_DESIRED_TEMP command
+                   MailSend m = new MailSend("sleepymrwindow@gmail.com", "123abc123ABC");
+
+                   String[] toArr = {"sleepyraspberrypi@gmail.com"};
+                   m.setTo(toArr);
+                   m.setFrom("sleepymrwindow@gmail.com");
+                   m.setSubject("REQUEST_ACTION_NOW=SET_MODE, MANUAL");
+                   m.setBody(" ");
+
+                   try {
+                       if (m.send()) {
+                           Toast.makeText(SecondActivity.this, "Manual Mode Activated.", Toast.LENGTH_LONG).show();
+                       } else {
+                           Toast.makeText(SecondActivity.this, "Communication Error.", Toast.LENGTH_SHORT).show();
+                       }
+                   } catch (Exception e) {
+                       //Toast.makeText(MailApp.this, "There was a problem sending the email.", Toast.LENGTH_LONG).show();
+                       Log.e("MailApp", "Could not send email", e);
+                   }
+               }
 
             }
 
