@@ -31,5 +31,6 @@
 
     <string name="title_activity_third">Blinds Schedule</string>
     <string name="blindStatus">This is the Blinds Schedule Page!</string>
+    <string name="switchText">Auto</string>
 
 </resources>
