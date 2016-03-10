@@ -44,6 +44,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import static java.lang.System.out;
+import java.util.*;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.atomic.AtomicReference;
+
+import javax.mail.*;
+import javax.activation.*;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -113,7 +119,38 @@ public class MainActivity extends AppCompatActivity {
 
         //Reading window and blind position from email and displaying
 
+        //String cont = new MailRead().execute().get();
+
+        String cont = "";
+        try {
+            cont = new MailRead().execute().get();
+            TextView window_pos = (TextView) this.findViewById(R.id.current_status4);
+            window_pos.setText(cont+"%");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        //System.out.println("Pi mail"+pi_mail.getSubject1());
+        //Message msg = pi_mail.getMsg();
+
+        /*
+        try {
+            //Multipart mp1 = (Multipart) msg.getContent();
+            //BodyPart bp1 = mp1.getBodyPart(0);
+
+            //System.out.println("SENT DATE:" + msg.getSentDate());
+            System.out.println("SUBJECT:" + pi_mail.getSubject());
+            System.out.println("CONTENT:" + pi_mail.getCont());
+        } catch (Exception mex) {
+            mex.printStackTrace();
+        }
         TextView window_pos = (TextView) this.findViewById(R.id.current_status4);
+        window_pos.setText(pi_mail.getCont()+"%");
+
+        TextView blind_pos = (TextView) this.findViewById(R.id.current_status5);
+        //blind_pos.setText(pi_mail.getContent1()+"%");
+        */
 
         Button button = (Button) findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
