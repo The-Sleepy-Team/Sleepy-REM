@@ -97,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
             preferenceEditorUnique.putString("mode", "AUTO");
             preferenceEditorUnique.putInt("last_val2", 0);
             preferenceEditorUnique.putString("auto_temp", "60");
+            preferenceEditorUnique.putString("blinds_mode", "AUTO");
             preferenceEditorUnique.commit();
         }
 
@@ -109,6 +110,14 @@ public class MainActivity extends AppCompatActivity {
         }
         else{
             view.setText("Windows are currently set to " + preferenceSettingsUnique.getString("mode", "AUTO"));
+        }
+
+        TextView view2 = (TextView) this.findViewById(R.id.current_status7);
+        if (preferenceSettingsUnique.getString("blinds_mode", "AUTO").equals("AUTO")) {
+            view2.setText("Blinds are currently set to " + preferenceSettingsUnique.getString("blinds_mode", "AUTO"));
+        }
+        else {
+            view2.setText("Blinds are currently set to " + preferenceSettingsUnique.getString("blinds_mode", "AUTO"));
         }
 
         //Reading window and blind position from email and displaying
