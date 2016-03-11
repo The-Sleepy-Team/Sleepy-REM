@@ -105,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
             preferenceEditorUnique.putString("auto_temp", "60");
             preferenceEditorUnique.putString("blinds_mode", "AUTO");
             preferenceEditorUnique.putInt("blinds_manual", 0);
+            preferenceEditorUnique.putInt("windows_manual", 0);
             preferenceEditorUnique.commit();
         }
 
@@ -250,6 +251,9 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, Settings.class);
             startActivity(intent);
             return true;
+        }
+        else if(id == R.id.sync_setting) {
+
         }
 
         return super.onOptionsItemSelected(item);
