@@ -73,6 +73,9 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String INITIALIZED = "initialized";
 
+    //For MailRead to retrieve Async readings
+    private String mail_content;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -135,6 +138,7 @@ public class MainActivity extends AppCompatActivity {
             cont = new MailRead().execute().get();
             TextView window_pos = (TextView) this.findViewById(R.id.current_status4);
             window_pos.setText(cont+"%");
+            System.out.println(cont);
         } catch (Exception e) {
             e.printStackTrace();
         }

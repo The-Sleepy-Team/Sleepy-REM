@@ -8,6 +8,8 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import javax.mail.*;
 import javax.activation.*;
+
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.widget.TextView;
 
@@ -45,8 +47,8 @@ public class MailRead extends AsyncTask<Void, Void, String> {
 
             //debugging purposes
             //System.out.println("SENT DATE:" + msg.getSentDate());
-            System.out.println("SUBJECT:" + msg.getSubject());
-            System.out.println("CONTENT:" + bp.getContent());
+            //System.out.println("SUBJECT:" + msg.getSubject());
+            //System.out.println("CONTENT:" + bp.getContent());
 
             return (bp.getContent().toString());
         } catch (Exception e) {
