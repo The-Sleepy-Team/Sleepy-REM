@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
+import android.widget.SeekBar;
 import android.widget.Spinner;
 
 import android.content.Intent;
@@ -84,15 +85,25 @@ public class SecondActivity extends AppCompatActivity {
                 //sends SleepyRaspberryPi a WINDOW_OPEN command
                 //then enters Second Activity
                 prefs = getSharedPreferences(prefName, 0);
+                SharedPreferences.Editor prefsEditor = prefs.edit();
+
                 String mode = prefs.getString("mode","AUTO");
 
                 if (mode.equals("MANUAL")) {
+
+                    prefsEditor.putInt("windows_manual", 100);
+                    prefsEditor.commit();
+
+                    SeekBar seekBar = (SeekBar) findViewById(R.id.seekBar1);
+
+                    seekBar.setProgress(100);
+
                     MailSend m = new MailSend("sleepymrwindow@gmail.com", "123abc123ABC");
 
                     String[] toArr = {"sleepyraspberrypi@gmail.com"};
                     m.setTo(toArr);
                     m.setFrom("sleepymrwindow@gmail.com");
-                    m.setSubject("REQUEST_ACTION_NOW=WINDOW_OPEN");
+                    m.setSubject("REQUEST_ACTION_NOW=WINDOW_POSITION, 100");
                     m.setBody(" ");
 
                     try {
@@ -121,14 +132,24 @@ public class SecondActivity extends AppCompatActivity {
                 //sends SleepyRaspberryPi a WINDOW_CLOSE command
                 //then enters Second Activity
                 prefs = getSharedPreferences(prefName, 0);
+                SharedPreferences.Editor prefsEditor = prefs.edit();
+
                 String mode = prefs.getString("mode","AUTO");
                 if(mode.equals("MANUAL")) {
+
+                    prefsEditor.putInt("windows_manual", 0);
+                    prefsEditor.commit();
+
+                    SeekBar seekBar = (SeekBar) findViewById(R.id.seekBar1);
+
+                    seekBar.setProgress(0);
+
                     MailSend m = new MailSend("sleepymrwindow@gmail.com", "123abc123ABC");
 
                     String[] toArr = {"sleepyraspberrypi@gmail.com"};
                     m.setTo(toArr);
                     m.setFrom("sleepymrwindow@gmail.com");
-                    m.setSubject("REQUEST_ACTION_NOW=WINDOW_CLOSE");
+                    m.setSubject("REQUEST_ACTION_NOW=WINDOW_POSITION, 0");
                     m.setBody(" ");
 
                     try {
@@ -395,6 +416,64 @@ public class SecondActivity extends AppCompatActivity {
         graph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.BOTTOM);
         graph.getLegendRenderer().setTextSize(16);
         //graph.setPadding(100, 100, 100, 100);
+
+
+        //Seekbar setup
+        final SharedPreferences settings = getSharedPreferences("MyPrefs", 0);
+        final SharedPreferences.Editor settingsEditor = settings.edit();
+
+        final int previous = settings.getInt("windows_manual", 0);
+        SeekBar seekBar = (SeekBar) findViewById(R.id.seekBar1);
+
+        seekBar.setProgress(previous);
+
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            int progress = previous;
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progressValue, boolean fromUser) {
+                progress = progressValue;
+                //text.setText(Integer.toString(progress));
+                //Toast.makeText(ThirdActivity.this, "Changing seekbar's progress.", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                //Toast.makeText(ThirdActivity.this, "Started tracking seekbar.", Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekbar) {
+                //Toast.makeText(ThirdActivity.this, "Stopped tracking seekbar.", Toast.LENGTH_SHORT).show();
+                if (settings.getString("mode", "AUTO").equals("MANUAL")) {
+                    settingsEditor.putInt("windows_manual", progress);
+                    settingsEditor.commit();
+
+
+                    MailSend m = new MailSend("sleepymrwindow@gmail.com", "123abc123ABC");
+
+                    String[] toArr = {"sleepyraspberrypi@gmail.com"};
+                    m.setTo(toArr);
+                    m.setFrom("sleepymrwindow@gmail.com");
+                    m.setSubject("REQUEST_ACTION_NOW=WINDOW_POSITION, " + Integer.toString(progress));
+                    m.setBody(" ");
+
+                    try {
+                        if (m.send()) {
+                            Toast.makeText(SecondActivity.this, "The windows will open to " + Integer.toString(progress) + "%", Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(SecondActivity.this, "Communication Error.", Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (Exception e) {
+                        //Toast.makeText(MailApp.this, "There was a problem sending the email.", Toast.LENGTH_LONG).show();
+                        Log.e("MailApp", "Could not send email", e);
+                    }
+                } else {
+                    Toast.makeText(SecondActivity.this, "Please set mode to MANUAL.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     private void goToThirdActivity() {
