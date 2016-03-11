@@ -20,7 +20,7 @@ public class MailRead extends AsyncTask<String, Void, String> {
     @Override
     protected String doInBackground(String... emailSubject) {
         try {
-            System.out.println(emailSubject);
+            //System.out.println(emailSubject);
             Properties props = new Properties();
             props.setProperty("mail.store.protocol", "imaps");
             Session session = Session.getInstance(props, null);
@@ -32,7 +32,7 @@ public class MailRead extends AsyncTask<String, Void, String> {
             for (int i = inbox.getMessageCount(); i > 0; i--)
             {
                 msg = inbox.getMessage(i);
-                System.out.println(msg.getSubject());
+                //System.out.println(msg.getSubject());
                 if (msg.getSubject().equals(emailSubject[0])) break;
             }
 

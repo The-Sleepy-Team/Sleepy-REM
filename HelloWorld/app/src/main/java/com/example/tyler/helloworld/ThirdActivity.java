@@ -224,7 +224,7 @@ public class ThirdActivity extends AppCompatActivity {
                     String[] toArr = {"sleepyraspberrypi@gmail.com"};
                     m.setTo(toArr);
                     m.setFrom("sleepymrwindow@gmail.com");
-                    m.setSubject("REQUEST_ACTION_NOW=BLINDS_OPEN_POSITION, " + Integer.toString(progress));
+                    m.setSubject("REQUEST_ACTION_NOW=BLINDS_POSITION, " + Integer.toString(progress));
                     m.setBody(" ");
 
                     try {

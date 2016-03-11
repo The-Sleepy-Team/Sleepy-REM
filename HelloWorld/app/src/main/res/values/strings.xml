@@ -32,6 +32,7 @@
     <string name="hours">Hours</string>
     <string name="minutes">Minutes</string>
     <string name="percentage">% Open</string>
+    <string name="button4">Clear</string>
 
     <string name="title_activity_third">Blinds Settings</string>
     <string name="blindStatus">This is the Blinds Schedule Page!</string>

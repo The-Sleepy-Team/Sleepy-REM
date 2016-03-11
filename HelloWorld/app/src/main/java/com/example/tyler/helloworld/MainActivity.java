@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
         preferenceEditorUnique = preferenceSettingsUnique.edit();
 
         //Here for testing purposes
-        preferenceEditorUnique.clear().commit();
+        //preferenceEditorUnique.clear().commit();
 
         boolean initialized = preferenceSettingsUnique.getBoolean(INITIALIZED, Boolean.FALSE);
 
@@ -128,9 +128,11 @@ public class MainActivity extends AppCompatActivity {
                 window_cont = new MailRead().execute(WINDOW_POSITION).get();
                 blind_cont = new MailRead().execute(BLIND_POSITION).get();
                 TextView window_pos = (TextView) this.findViewById(R.id.current_status4);
-                window_pos.setText(window_cont + "%");
+                window_pos.setText(window_cont.trim() + "%");
+                preferenceEditorUnique.putString("window_status", window_cont.trim());
                 TextView blind_pos = (TextView) this.findViewById(R.id.current_status5);
-                blind_pos.setText(blind_cont + "%");
+                blind_pos.setText(blind_cont.trim() + "%");
+                preferenceEditorUnique.putString("blind_status", blind_cont.trim());
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -153,6 +155,14 @@ public class MainActivity extends AppCompatActivity {
         } else {
             view2.setText("Blinds are currently set to " + preferenceSettingsUnique.getString("blinds_mode", "AUTO"));
         }
+
+        TextView window_pos = (TextView) this.findViewById(R.id.current_status4);
+        window_pos.setText(preferenceSettingsUnique.getString("window_status", "-") + "%");
+
+        TextView blind_pos = (TextView) this.findViewById(R.id.current_status5);
+        blind_pos.setText(preferenceSettingsUnique.getString("blind_status", "-") + "%");
+
+
         
         Button button = (Button) findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
@@ -244,13 +254,18 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
             return true;
         } else if (id == R.id.sync_setting) {
+            preferenceSettingsUnique = getSharedPreferences("MyPrefs", 0);
+            preferenceEditorUnique = preferenceSettingsUnique.edit();
             try {
                 window_cont = new MailRead().execute(WINDOW_POSITION).get();
                 blind_cont = new MailRead().execute(BLIND_POSITION).get();
                 TextView window_pos = (TextView) this.findViewById(R.id.current_status4);
-                window_pos.setText(window_cont + "%");
+                window_pos.setText(window_cont.trim() + "%");
+                preferenceEditorUnique.putString("window_status", window_cont.trim());
                 TextView blind_pos = (TextView) this.findViewById(R.id.current_status5);
-                blind_pos.setText(blind_cont + "%");
+                blind_pos.setText(blind_cont.trim() + "%");
+                preferenceEditorUnique.putString("blind_status", blind_cont.trim());
+                preferenceEditorUnique.commit();
             } catch (Exception e) {
                 e.printStackTrace();
             }

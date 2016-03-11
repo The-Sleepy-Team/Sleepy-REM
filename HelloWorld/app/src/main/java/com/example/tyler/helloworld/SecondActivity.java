@@ -53,12 +53,18 @@ public class SecondActivity extends AppCompatActivity {
     private SharedPreferences.Editor preferenceEditorUnique;
     int id=0;
     int id2=0;
+    String[] graphData = {"GRAPH_DATA"};
+    String[] tempData = {"TEMPERATURE"};
+    public static final String INITIALIZED = "initialized2";
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
      */
     private GoogleApiClient client;
     private Spinner spinner;
+    private String graph_data = "";
+    private String temp_data = "";
+    private String temp = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +84,55 @@ public class SecondActivity extends AppCompatActivity {
                 goToThirdActivity();
             }
         });*/
+        prefs = getSharedPreferences(prefName, 0);
+        SharedPreferences.Editor prefsEditor = prefs.edit();
+
+        boolean initialized = prefs.getBoolean(INITIALIZED, Boolean.FALSE);
+
+        if (!initialized) {
+
+            //prefsEditor.putBoolean(INITIALIZED, Boolean.TRUE);
+
+            try{
+                graph_data =  new MailRead().execute(graphData).get();
+                for(String retval: graph_data.split("\n")){
+                    retval = retval.trim();
+                    if(retval.equals("PREDICTIONS:")){
+                        //Do nothing
+                    }
+                    else if(retval.equals("DESIRED_TEMP:")){
+                        prefsEditor.putString("PREDICTIONS", temp);
+                        prefsEditor.commit();
+                        temp = "";
+                    }
+                    else if(retval.equals("LOG:")) {
+                        prefsEditor.putString("DESIRED_TEMP", temp);
+                        prefsEditor.commit();
+                        temp = "";
+                    }
+                    else{
+                        temp += retval + "\n";
+                        //System.out.println(temp.substring(0,3));
+                    }
+                }
+                prefsEditor.putString("LOG", temp);
+
+                temp_data = new MailRead().execute(tempData).get();
+                TextView inside_temp = (TextView) this.findViewById(R.id.insideTemp);
+                prefsEditor.putString("inside_temp", temp_data.trim());
+                inside_temp.setText(temp_data.trim() + "F");
+
+
+                prefsEditor.commit();
+            }
+            catch(Exception e){
+                System.out.println(e.toString());
+            }
+
+        }
+
+        TextView inside_temp = (TextView) this.findViewById(R.id.insideTemp);
+        inside_temp.setText(prefs.getString("inside_temp", "-") + "F");
 
         Button button = (Button) findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
@@ -130,7 +185,45 @@ public class SecondActivity extends AppCompatActivity {
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //sends SleepyRaspberryPi a WINDOW_OPEN command
+                //then enters Second Activity
+                prefs = getSharedPreferences(prefName, 0);
+                SharedPreferences.Editor prefsEditor = prefs.edit();
 
+                String mode = prefs.getString("mode","AUTO");
+
+                if (mode.equals("MANUAL")) {
+
+                    prefsEditor.putInt("windows_manual", 0);
+                    prefsEditor.commit();
+
+                    SeekBar seekBar = (SeekBar) findViewById(R.id.seekBar1);
+
+                    seekBar.setProgress(0);
+
+                    MailSend m = new MailSend("sleepymrwindow@gmail.com", "123abc123ABC");
+
+                    String[] toArr = {"sleepyraspberrypi@gmail.com"};
+                    m.setTo(toArr);
+                    m.setFrom("sleepymrwindow@gmail.com");
+                    m.setSubject("REQUEST_ACTION_NOW=WINDOW_POSITION, 0");
+                    m.setBody(" ");
+
+                    try {
+                        if (m.send()) {
+                            Toast.makeText(SecondActivity.this, "Window Closing Now.", Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(SecondActivity.this, "Communication Error.", Toast.LENGTH_LONG).show();
+                        }
+                    } catch (Exception e) {
+                        //Toast.makeText(MailApp.this, "There was a problem sending the email.", Toast.LENGTH_LONG).show();
+                        Log.e("MailApp", "Could not send email", e);
+                    }
+                }
+                else
+                {
+                    Toast.makeText(SecondActivity.this, "Please set mode to MANUAL to use.", Toast.LENGTH_SHORT).show();
+                }
 
 
             }
@@ -296,71 +389,45 @@ public class SecondActivity extends AppCompatActivity {
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
 
+
         GraphView graph = (GraphView) findViewById(R.id.graph);
         graph.setTitle("Temperature Forecast");
+        //prefs = getSharedPreferences(prefName, 0);
+        //SharedPreferences.Editor prefsEditor = prefs.edit();
 
         graph.getViewport().setXAxisBoundsManual(true);
         graph.getViewport().setMinX(0);
         graph.getViewport().setMaxX(24);
         graph.getViewport().setScrollable(true);
-        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(new DataPoint[] {
-                new DataPoint(0, 48),
-                new DataPoint(1, 48),
-                new DataPoint(2, 48),
-                new DataPoint(3, 47),
-                new DataPoint(4, 47),
-                new DataPoint(5, 47),
-                new DataPoint(6, 48),
-                new DataPoint(7, 48),
-                new DataPoint(8, 48),
-                new DataPoint(9, 48),
-                new DataPoint(10, 57),
-                new DataPoint(11, 57),
-                new DataPoint(12, 57),
-                new DataPoint(13, 64),
-                new DataPoint(14, 64),
-                new DataPoint(15, 64),
-                new DataPoint(16, 66),
-                new DataPoint(17, 66),
-                new DataPoint(18, 66),
-                new DataPoint(19, 62),
-                new DataPoint(20, 62),
-                new DataPoint(21, 62),
-                new DataPoint(22, 57),
-                new DataPoint(23, 57),
-                new DataPoint(24, 57)
-        });
-        LineGraphSeries<DataPoint> series2 = new LineGraphSeries<DataPoint>(new DataPoint[] {
-                new DataPoint(0, 65),
-                new DataPoint(1.5, 65),
-                new DataPoint(2, 65),
-                new DataPoint(3, 65),
-                new DataPoint(4, 65),
-                new DataPoint(5, 65),
-                new DataPoint(6, 65),
-                new DataPoint(7, 65),
-                new DataPoint(8, 65),
-                new DataPoint(9, 65),
-                new DataPoint(10, 65),
-                new DataPoint(11, 65),
-                new DataPoint(12, 65),
-                new DataPoint(13, 65),
-                new DataPoint(14, 65),
-                new DataPoint(15, 65),
-                new DataPoint(16, 65),
-                new DataPoint(17, 65),
-                new DataPoint(18, 65),
-                new DataPoint(19, 65),
-                new DataPoint(20, 65),
-                new DataPoint(21, 65),
-                new DataPoint(22, 65),
-                new DataPoint(23, 65),
-                new DataPoint(24, 65)
-        });
-        LineGraphSeries<DataPoint> series3 = new LineGraphSeries<DataPoint>(new DataPoint[] {
-                new DataPoint(0, 70),
-                new DataPoint(24, 70)
-        });
+
+        String[] predictions = prefs.getString("PREDICTIONS", "").split("\n");
+        DataPoint[] datapoints = new DataPoint[predictions.length+1];
+        int counter = 0;
+        for(String s: predictions){
+            String[] s2 = s.split(", ");
+            datapoints[counter] = new DataPoint(Float.parseFloat(s2[0]), Float.parseFloat(s2[1]));
+            counter++;
+        }
+        datapoints[counter] = new DataPoint(24.0, datapoints[counter-1].getY());
+        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(datapoints);
+
+        String[] desired_temp = prefs.getString("DESIRED_TEMP", "").split("\n");
+        DataPoint[] datapoints2 = new DataPoint[2];
+        datapoints2[0] = new DataPoint(0.0, Float.parseFloat(desired_temp[0]));
+        datapoints2[1] = new DataPoint(24.0, Float.parseFloat(desired_temp[0]));
+        LineGraphSeries<DataPoint> series2 = new LineGraphSeries<DataPoint>(datapoints2);
+
+
+        String[] log = prefs.getString("LOG", "").split("\n");
+        DataPoint[] datapoints3 = new DataPoint[log.length];
+        counter = 0;
+
+        for(String s: log){
+            String[] s2 = s.split(", ");
+            datapoints3[counter] = new DataPoint(Float.parseFloat(s2[0]), Float.parseFloat(s2[1]));
+            counter++;
+        }
+        LineGraphSeries<DataPoint> series3 = new LineGraphSeries<DataPoint>(datapoints3);
 
         graph.getGridLabelRenderer().setVerticalAxisTitle("Temperature (F)");
         graph.getGridLabelRenderer().setHorizontalAxisTitle("Time (24 hour clock)");
@@ -451,6 +518,9 @@ public class SecondActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+        final SharedPreferences settings = getSharedPreferences("MyPrefs", 0);
+        final SharedPreferences.Editor settingsEditor = settings.edit();
+
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
@@ -464,7 +534,97 @@ public class SecondActivity extends AppCompatActivity {
         }
         else if(id == R.id.sync_setting) {
 
+
+            try{
+
+                temp_data = new MailRead().execute(tempData).get();
+                TextView inside_temp = (TextView) this.findViewById(R.id.insideTemp);
+                settingsEditor.putString("inside_temp", temp_data.trim());
+                inside_temp.setText(temp_data.trim() + "F");
+
+                String graph_data = "";
+                String temp = "";
+                graph_data =  new MailRead().execute(graphData).get();
+                for(String retval: graph_data.split("\n")){
+                    if(retval.equals("PREDICTIONS:")){
+                        //Do nothing
+                    }
+                    else if(retval.equals("DESIRED_TEMP:")){
+                        settingsEditor.putString("PREDICTIONS", temp);
+                        settingsEditor.commit();
+                        temp = "";
+                    }
+                    else if(retval.equals("LOG:")) {
+                        settingsEditor.putString("DESIRED_TEMP", temp);
+                        settingsEditor.commit();
+                        temp = "";
+                    }
+                    else{
+                        temp += retval + "\n";
+                    }
+                }
+                settingsEditor.putString("LOG", temp);
+                settingsEditor.commit();
+            }
+            catch(Exception e){
+
+            }
+            GraphView graph = (GraphView) findViewById(R.id.graph);
+            graph.setTitle("Temperature Forecast");
+
+            graph.getViewport().setXAxisBoundsManual(true);
+            graph.getViewport().setMinX(0);
+            graph.getViewport().setMaxX(24);
+            graph.getViewport().setScrollable(true);
+
+            DataPoint[] datapoints = new DataPoint[24];
+            int counter = 0;
+            for(String s: prefs.getString("PREDICTIONS", "").split("\n")){
+                String[] s2 = s.split(", ");
+                datapoints[counter] = new DataPoint(Float.parseFloat(s2[0]), Float.parseFloat(s2[1]));
+                counter++;
+            }
+            datapoints[counter] = new DataPoint(24.0, datapoints[counter-1].getY());
+            LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(datapoints);
+
+            String[] desired_temp = prefs.getString("DESIRED_TEMP", "").split("\n");
+            DataPoint[] datapoints2 = new DataPoint[2];
+            datapoints2[0] = new DataPoint(0.0, Float.parseFloat(desired_temp[0]));
+            datapoints2[1] = new DataPoint(24.0, Float.parseFloat(desired_temp[0]));
+            LineGraphSeries<DataPoint> series2 = new LineGraphSeries<DataPoint>(datapoints2);
+
+
+            String[] log = prefs.getString("DESIRED_TEMP", "").split("\n");
+            DataPoint[] datapoints3 = new DataPoint[log.length];
+            counter = 0;
+
+            for(String s: log){
+                String[] s2 = s.split(", ");
+                datapoints3[counter] = new DataPoint(Float.parseFloat(s2[0]), Float.parseFloat(s2[1]));
+                counter++;
+            }
+            LineGraphSeries<DataPoint> series3 = new LineGraphSeries<DataPoint>(datapoints3);
+
+            graph.getGridLabelRenderer().setVerticalAxisTitle("Temperature (F)");
+            graph.getGridLabelRenderer().setHorizontalAxisTitle("Time (24 hour clock)");
+            graph.getGridLabelRenderer().setPadding(30);
+            graph.addSeries(series);
+            graph.addSeries(series2);
+            graph.addSeries(series3);
+            series.setTitle("Forecasted Temperature");
+            series2.setTitle("Desired Temperature");
+            series3.setTitle("Actual Temperature");
+            Paint p1 = new Paint();
+            Paint p2 = new Paint();
+            Paint p3 = new Paint();
+            series.setColor(Color.BLACK);
+            series2.setColor(Color.BLUE);
+            series3.setColor(Color.GREEN);
+            graph.getLegendRenderer().setVisible(true);
+            graph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.BOTTOM);
+            graph.getLegendRenderer().setTextSize(16);
         }
+
 
         return super.onOptionsItemSelected(item);
     }

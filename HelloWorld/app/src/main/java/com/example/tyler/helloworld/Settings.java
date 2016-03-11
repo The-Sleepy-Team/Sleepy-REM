@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -22,7 +23,10 @@ import android.text.InputFilter;
 import android.text.Spanned;
 
 public class Settings extends AppCompatActivity {
+
     private String mode = "WINDOWS";
+    private SharedPreferences settings;
+    private SharedPreferences.Editor settingsEditor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +36,9 @@ public class Settings extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        settings = getSharedPreferences("MyPrefs", 0);
+        settingsEditor = settings.edit();
 
         final List<String> list = new ArrayList<String>();
         list.add("WINDOWS");
@@ -55,17 +62,63 @@ public class Settings extends AppCompatActivity {
         });
 
         final EditText hours = (EditText) findViewById(R.id.hours);
-        hours.setFilters(new InputFilter[]{new InputFilterMinMax("0","23")});
+        hours.setFilters(new InputFilter[]{new InputFilterMinMax("0", "23")});
         final EditText minutes = (EditText) findViewById(R.id.minutes);
-        minutes.setFilters(new InputFilter[]{new InputFilterMinMax("0","59")});
+        minutes.setFilters(new InputFilter[]{new InputFilterMinMax("0", "59")});
         final EditText percentage = (EditText) findViewById(R.id.percentage);
-        percentage.setFilters(new InputFilter[]{new InputFilterMinMax("0","100")});
+        percentage.setFilters(new InputFilter[]{new InputFilterMinMax("0", "100")});
+        final TextView windows = (TextView) findViewById(R.id.windows);
+        final TextView blinds = (TextView) findViewById(R.id.windows);
+
+        if(settings.getString("WINDOWS", "") == ""){
+            windows.setVisibility(View.GONE);
+        }
+        else{
+            String windows_text = settings.getString("WINDOWS", "");
+            windows.setText(windows_text);
+            windows.setVisibility(View.VISIBLE);
+        }
+        if(settings.getString("BLINDS", "") == ""){
+            blinds.setVisibility(View.GONE);
+        }
+        else{
+            String blinds_text = settings.getString("BLINDS", "");
+            blinds.setText(blinds_text);
+            blinds.setVisibility(View.VISIBLE);
+        }
 
         Button button3 = (Button) findViewById(R.id.button);
         button3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String s = mode + " " + hours.getText() + " " + minutes.getText() + " " + percentage.getText() + "\n";
+                s = settings.getString(mode, "") + s;
+                settingsEditor.putString(mode, s);
+                settingsEditor.commit();
+
+                if(settings.getString("WINDOWS", "") != ""){
+                    String windows_text = settings.getString("WINDOWS", "");
+                    windows.setText(windows_text);
+                    windows.setVisibility(View.VISIBLE);
+                }
+                if(settings.getString("BLINDS", "") != ""){
+                    String blinds_text = settings.getString("BLINDS", "");
+                    blinds.setText(blinds_text);
+                    blinds.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+
+        Button button4 = (Button) findViewById(R.id.button2);
+        button4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                settingsEditor.putString("WINDOWS","");
+                settingsEditor.putString("BLINDS","");
+                settingsEditor.commit();
+                windows.setVisibility(View.GONE);
+                blinds.setVisibility(View.GONE);
             }
         });
     }
