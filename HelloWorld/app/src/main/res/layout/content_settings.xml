@@ -12,13 +12,92 @@
     tools:context="com.example.tyler.helloworld.Settings"
     tools:showIn="@layout/activity_settings">
 
-    <TextView
+<!--    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/settings_page"
         android:id="@+id/text2"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="190dp" />
+        android:layout_marginTop="190dp" />-->
+
+    <ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/ScrollView01"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/abc_action_bar_default_height_material">
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:columnCount="2"
+            android:rowCount="25">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@color/colorHighlight">
+
+                <Spinner
+                    android:id="@+id/spinner"
+                    android:layout_width="0dp"
+                    android:textSize="15sp"
+                    android:layout_weight="2"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:layout_gravity="center_horizontal"
+                    android:spinnerMode="dialog"
+                    android:transitionGroup="false" />
+
+                <EditText
+                    android:id="@+id/hours"
+                    android:layout_width="0dp"
+                    android:textSize="15sp"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hours"
+                    android:maxLength="2"
+                    android:inputType="number"/>
+
+                <EditText
+                    android:id="@+id/minutes"
+                    android:layout_width="0dp"
+                    android:textSize="15sp"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/minutes"
+                    android:maxLength="2"
+                    android:inputType="number"/>
+
+                <EditText
+                    android:id="@+id/percentage"
+                    android:layout_width="0dp"
+                    android:textSize="15sp"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/percentage"
+                    android:maxLength="3"
+                    android:inputType="number"/>
+
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="@string/button3"
+                    android:id="@+id/button" />
+
+            </LinearLayout>
+
+        </GridLayout>
+    </ScrollView>
 
 </RelativeLayout>

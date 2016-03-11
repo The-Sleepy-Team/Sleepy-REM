@@ -12,6 +12,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -129,44 +130,8 @@ public class SecondActivity extends AppCompatActivity {
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //sends SleepyRaspberryPi a WINDOW_CLOSE command
-                //then enters Second Activity
-                prefs = getSharedPreferences(prefName, 0);
-                SharedPreferences.Editor prefsEditor = prefs.edit();
 
-                String mode = prefs.getString("mode","AUTO");
-                if(mode.equals("MANUAL")) {
 
-                    prefsEditor.putInt("windows_manual", 0);
-                    prefsEditor.commit();
-
-                    SeekBar seekBar = (SeekBar) findViewById(R.id.seekBar1);
-
-                    seekBar.setProgress(0);
-
-                    MailSend m = new MailSend("sleepymrwindow@gmail.com", "123abc123ABC");
-
-                    String[] toArr = {"sleepyraspberrypi@gmail.com"};
-                    m.setTo(toArr);
-                    m.setFrom("sleepymrwindow@gmail.com");
-                    m.setSubject("REQUEST_ACTION_NOW=WINDOW_POSITION, 0");
-                    m.setBody(" ");
-
-                    try {
-                        if (m.send()) {
-                            Toast.makeText(SecondActivity.this, "Window Closing Now.", Toast.LENGTH_LONG).show();
-                        } else {
-                            Toast.makeText(SecondActivity.this, "Communication Error.", Toast.LENGTH_LONG).show();
-                        }
-                    } catch (Exception e) {
-                        //Toast.makeText(MailApp.this, "There was a problem sending the email.", Toast.LENGTH_LONG).show();
-                        Log.e("MailApp", "Could not send email", e);
-                    }
-                }
-                else
-                {
-                    Toast.makeText(SecondActivity.this, "Please set mode to MANUAL to use.", Toast.LENGTH_SHORT).show();
-                }
 
             }
         });
@@ -474,6 +439,34 @@ public class SecondActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            Intent intent = new Intent(this, Settings.class);
+            startActivity(intent);
+            return true;
+        }
+        else if(id == R.id.sync_setting) {
+
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void goToThirdActivity() {

@@ -28,7 +28,10 @@
     <string name="sync_settings">Sync Now</string>
 
     <string name="title_activity_settings">Settings</string>
-    <string name="settings_page">This is the settings page!</string>
+    <string name="button3">Set</string>
+    <string name="hours">Hours</string>
+    <string name="minutes">Minutes</string>
+    <string name="percentage">% Open</string>
 
     <string name="title_activity_third">Blinds Settings</string>
     <string name="blindStatus">This is the Blinds Schedule Page!</string>
