@@ -92,7 +92,7 @@ public class SecondActivity extends AppCompatActivity {
                     String[] toArr = {"sleepyraspberrypi@gmail.com"};
                     m.setTo(toArr);
                     m.setFrom("sleepymrwindow@gmail.com");
-                    m.setSubject("REQUEST_ACTION_NOW=WINDOW_OPEN");
+                    m.setSubject("REQUEST_ACTION_NOW=WINDOW_POSITION, 100");
                     m.setBody(" ");
 
                     try {
@@ -128,7 +128,7 @@ public class SecondActivity extends AppCompatActivity {
                     String[] toArr = {"sleepyraspberrypi@gmail.com"};
                     m.setTo(toArr);
                     m.setFrom("sleepymrwindow@gmail.com");
-                    m.setSubject("REQUEST_ACTION_NOW=WINDOW_CLOSE");
+                    m.setSubject("REQUEST_ACTION_NOW=WINDOW_POSITION, 0");
                     m.setBody(" ");
 
                     try {

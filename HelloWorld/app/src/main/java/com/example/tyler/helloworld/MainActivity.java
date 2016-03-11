@@ -104,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
             preferenceEditorUnique.putInt("last_val2", 0);
             preferenceEditorUnique.putString("auto_temp", "60");
             preferenceEditorUnique.putString("blinds_mode", "AUTO");
+            preferenceEditorUnique.putInt("blinds_manual", 0);
             preferenceEditorUnique.commit();
         }
 
