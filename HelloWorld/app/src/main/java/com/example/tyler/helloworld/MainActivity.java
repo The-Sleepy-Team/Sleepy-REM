@@ -2,6 +2,7 @@ package com.example.tyler.helloworld;
 
 import android.app.Application;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -33,6 +34,9 @@ import org.json.JSONObject;
 
 import com.example.tyler.helloworld.Location;
 import com.example.tyler.helloworld.Weather;
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -75,6 +79,11 @@ public class MainActivity extends AppCompatActivity {
 
     //For MailRead to retrieve Async readings
     private String mail_content;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
 
         boolean initialized = preferenceSettingsUnique.getBoolean(INITIALIZED, Boolean.FALSE);
 
-        if(!initialized){
+        if (!initialized) {
 
             preferenceEditorUnique.putBoolean(INITIALIZED, Boolean.TRUE);
 
@@ -117,17 +126,15 @@ public class MainActivity extends AppCompatActivity {
 
         TextView view = (TextView) this.findViewById(R.id.current_status6);
         if (preferenceSettingsUnique.getString("mode", "AUTO").equals("AUTO")) {
-            view.setText("Windows are currently set to " + preferenceSettingsUnique.getString("mode", "AUTO") + ", " + preferenceSettingsUnique.getString("auto_temp", "60")+ "F");
-        }
-        else{
+            view.setText("Windows are currently set to " + preferenceSettingsUnique.getString("mode", "AUTO") + ", " + preferenceSettingsUnique.getString("auto_temp", "60") + "F");
+        } else {
             view.setText("Windows are currently set to " + preferenceSettingsUnique.getString("mode", "AUTO"));
         }
 
         TextView view2 = (TextView) this.findViewById(R.id.current_status7);
         if (preferenceSettingsUnique.getString("blinds_mode", "AUTO").equals("AUTO")) {
             view2.setText("Blinds are currently set to " + preferenceSettingsUnique.getString("blinds_mode", "AUTO"));
-        }
-        else {
+        } else {
             view2.setText("Blinds are currently set to " + preferenceSettingsUnique.getString("blinds_mode", "AUTO"));
         }
 
@@ -136,10 +143,12 @@ public class MainActivity extends AppCompatActivity {
         //String cont = new MailRead().execute().get();
 
         String cont = "";
+        String[] WINDOW_POSITION = {"WINDOW_POSITION"};
+        String[] BLIND_POSITION = {"BLIND_POSITION"};
         try {
-            cont = new MailRead().execute().get();
+            cont = new MailRead().execute(WINDOW_POSITION).get();
             TextView window_pos = (TextView) this.findViewById(R.id.current_status4);
-            window_pos.setText(cont+"%");
+            window_pos.setText(cont + "%");
             System.out.println(cont);
         } catch (Exception e) {
             e.printStackTrace();
@@ -212,7 +221,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-       //cityText = (TextView) findViewById(R.id.cityText);
+        //cityText = (TextView) findViewById(R.id.cityText);
         /*
         condDescr = (TextView) findViewById(R.id.condDescr);
         temp = (TextView) findViewById(R.id.temp);
@@ -229,10 +238,11 @@ public class MainActivity extends AppCompatActivity {
         //task.execute(new String[]{city});
         try {
             RetrieveWeather();
+        } catch (Exception e) {
         }
-        catch(Exception e)
-        {
-        }
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     @Override
@@ -255,8 +265,7 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, Settings.class);
             startActivity(intent);
             return true;
-        }
-        else if(id == R.id.sync_setting) {
+        } else if (id == R.id.sync_setting) {
 
         }
 
@@ -273,37 +282,37 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-   /* private class JSONWeatherTask extends AsyncTask<String, Void, Weather> {
+    /* private class JSONWeatherTask extends AsyncTask<String, Void, Weather> {
 
-        @Override
-        protected Weather doInBackground(String... params) {
-            Weather weather = new Weather();
-            String data = ((new WeatherHttpClient()).getWeatherData(params[0]));
+         @Override
+         protected Weather doInBackground(String... params) {
+             Weather weather = new Weather();
+             String data = ((new WeatherHttpClient()).getWeatherData(params[0]));
 
-            try {
-                weather = JSONWeatherParser.getWeather(data);
+             try {
+                 weather = JSONWeatherParser.getWeather(data);
 
-                // Let's retrieve the icon
-                weather.iconData = ((new WeatherHttpClient()).getImage(weather.currentCondition.getIcon()));
+                 // Let's retrieve the icon
+                 weather.iconData = ((new WeatherHttpClient()).getImage(weather.currentCondition.getIcon()));
 
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return weather;
+             } catch (JSONException e) {
+                 e.printStackTrace();
+             }
+             return weather;
 
-        }
+         }
 
 
-        @Override
-        protected void onPostExecute(Weather weather) {
-            super.onPostExecute(weather);
+         @Override
+         protected void onPostExecute(Weather weather) {
+             super.onPostExecute(weather);
 
-            if (weather.iconData != null && weather.iconData.length > 0) {
-                Bitmap img = BitmapFactory.decodeByteArray(weather.iconData, 0, weather.iconData.length);
-                imgView.setImageBitmap(img);
-            }
+             if (weather.iconData != null && weather.iconData.length > 0) {
+                 Bitmap img = BitmapFactory.decodeByteArray(weather.iconData, 0, weather.iconData.length);
+                 imgView.setImageBitmap(img);
+             }
 
-            *//*cityText.setText(weather.location.getCity() + "," + weather.location.getCountry());
+             *//*cityText.setText(weather.location.getCity() + "," + weather.location.getCountry());
             condDescr.setText(weather.currentCondition.getCondition() + "(" + weather.currentCondition.getDescr() + ")");
             temp.setText("" + Math.round((weather.temperature.getTemp() - 273.15)) + "�C");
             hum.setText("" + weather.currentCondition.getHumidity() + "%");
@@ -320,17 +329,15 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }*/
-   private void RetrieveWeather() throws IOException
-   {
-       String url = "http://api.openweathermap.org/data/2.5/weather?id=5359777&APPID=fefa0ed2dcc3abbe8f23b20837512564";
+    private void RetrieveWeather() throws IOException {
+        String url = "http://api.openweathermap.org/data/2.5/weather?id=5359777&APPID=fefa0ed2dcc3abbe8f23b20837512564";
 
-       WeatherServiceAsync task = new WeatherServiceAsync(this);
+        WeatherServiceAsync task = new WeatherServiceAsync(this);
 
-       task.execute(url);
-   }
+        task.execute(url);
+    }
 
-    public void SetTemp(double temperature)
-    {
+    public void SetTemp(double temperature) {
         TextView view = (TextView) this.findViewById(R.id.textView);
 
         DecimalFormat df = new DecimalFormat("###.##");
@@ -339,10 +346,49 @@ public class MainActivity extends AppCompatActivity {
         view.setText(formattedTemperature + "F");
     }
 
-    public void SetError()
-    {
+    public void SetError() {
         TextView view2 = (TextView) this.findViewById(R.id.textView);
         view2.setText("Weather Unavailable.");
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "Main Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app deep link URI is correct.
+                Uri.parse("android-app://com.example.tyler.helloworld/http/host/path")
+        );
+        AppIndex.AppIndexApi.start(client, viewAction);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "Main Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app deep link URI is correct.
+                Uri.parse("android-app://com.example.tyler.helloworld/http/host/path")
+        );
+        AppIndex.AppIndexApi.end(client, viewAction);
+        client.disconnect();
     }
 
 /*    public void SetMaxTemp(double temperature)

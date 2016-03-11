@@ -13,13 +13,14 @@ import android.app.Activity;
 import android.os.AsyncTask;
 import android.widget.TextView;
 
-public class MailRead extends AsyncTask<Void, Void, String> {
+public class MailRead extends AsyncTask<String, Void, String> {
 
     private Exception exception;
 
     @Override
-    protected String doInBackground(Void... params) {
+    protected String doInBackground(String... emailSubject) {
         try {
+            System.out.println(emailSubject);
             Properties props = new Properties();
             props.setProperty("mail.store.protocol", "imaps");
             Session session = Session.getInstance(props, null);
@@ -27,12 +28,21 @@ public class MailRead extends AsyncTask<Void, Void, String> {
             store.connect("imap.gmail.com", "sleepymrwindow@gmail.com", "123abc123ABC");
             Folder inbox = store.getFolder("INBOX");
             inbox.open(Folder.READ_ONLY);
-            Message msg = inbox.getMessage(inbox.getMessageCount());
+            Message msg = null;
+            for (int i = inbox.getMessageCount(); i > 0; i--)
+            {
+                msg = inbox.getMessage(i);
+                System.out.println(msg.getSubject());
+                if (msg.getSubject().equals(emailSubject[0])) break;
+            }
 
+            /*
             Address[] in = msg.getFrom();
             for (Address address : in) {
                 System.out.println("FROM:" + address.toString());
             }
+            */
+
 
             MailcapCommandMap mc = (MailcapCommandMap) CommandMap.getDefaultCommandMap();
             mc.addMailcap("text/html;; x-java-content-handler=com.sun.mail.handlers.text_html");
