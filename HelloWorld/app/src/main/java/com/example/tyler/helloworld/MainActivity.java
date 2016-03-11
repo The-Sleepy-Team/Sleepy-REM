@@ -85,6 +85,12 @@ public class MainActivity extends AppCompatActivity {
      */
     private GoogleApiClient client;
 
+    //For window and blind positions
+    String window_cont = "";
+    String blind_cont = "";
+    String[] WINDOW_POSITION = {"WINDOW_POSITION"};
+    String[] BLIND_POSITION = {"BLIND_POSITION"};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
         preferenceEditorUnique = preferenceSettingsUnique.edit();
 
         //Here for testing purposes
-        //preferenceEditorUnique.clear().commit();
+        preferenceEditorUnique.clear().commit();
 
         boolean initialized = preferenceSettingsUnique.getBoolean(INITIALIZED, Boolean.FALSE);
 
@@ -118,6 +124,16 @@ public class MainActivity extends AppCompatActivity {
             preferenceEditorUnique.putString("blinds_mode", "AUTO");
             preferenceEditorUnique.putInt("blinds_manual", 0);
             preferenceEditorUnique.putInt("windows_manual", 0);
+            try {
+                window_cont = new MailRead().execute(WINDOW_POSITION).get();
+                blind_cont = new MailRead().execute(BLIND_POSITION).get();
+                TextView window_pos = (TextView) this.findViewById(R.id.current_status4);
+                window_pos.setText(window_cont + "%");
+                TextView blind_pos = (TextView) this.findViewById(R.id.current_status5);
+                blind_pos.setText(blind_cont + "%");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             preferenceEditorUnique.commit();
         }
 
@@ -137,45 +153,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             view2.setText("Blinds are currently set to " + preferenceSettingsUnique.getString("blinds_mode", "AUTO"));
         }
-
-        //Reading window and blind position from email and displaying
-
-        //String cont = new MailRead().execute().get();
-
-        String cont = "";
-        String[] WINDOW_POSITION = {"WINDOW_POSITION"};
-        String[] BLIND_POSITION = {"BLIND_POSITION"};
-        try {
-            cont = new MailRead().execute(WINDOW_POSITION).get();
-            TextView window_pos = (TextView) this.findViewById(R.id.current_status4);
-            window_pos.setText(cont + "%");
-            System.out.println(cont);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
-        //System.out.println("Pi mail"+pi_mail.getSubject1());
-        //Message msg = pi_mail.getMsg();
-
-        /*
-        try {
-            //Multipart mp1 = (Multipart) msg.getContent();
-            //BodyPart bp1 = mp1.getBodyPart(0);
-
-            //System.out.println("SENT DATE:" + msg.getSentDate());
-            System.out.println("SUBJECT:" + pi_mail.getSubject());
-            System.out.println("CONTENT:" + pi_mail.getCont());
-        } catch (Exception mex) {
-            mex.printStackTrace();
-        }
-        TextView window_pos = (TextView) this.findViewById(R.id.current_status4);
-        window_pos.setText(pi_mail.getCont()+"%");
-
-        TextView blind_pos = (TextView) this.findViewById(R.id.current_status5);
-        //blind_pos.setText(pi_mail.getContent1()+"%");
-        */
-
+        
         Button button = (Button) findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -266,7 +244,16 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
             return true;
         } else if (id == R.id.sync_setting) {
-
+            try {
+                window_cont = new MailRead().execute(WINDOW_POSITION).get();
+                blind_cont = new MailRead().execute(BLIND_POSITION).get();
+                TextView window_pos = (TextView) this.findViewById(R.id.current_status4);
+                window_pos.setText(window_cont + "%");
+                TextView blind_pos = (TextView) this.findViewById(R.id.current_status5);
+                blind_pos.setText(blind_cont + "%");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         return super.onOptionsItemSelected(item);
